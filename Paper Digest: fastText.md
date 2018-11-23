@@ -15,6 +15,9 @@ The authors of this paper has modified the original cbow model using several tec
 By integrating all of these techniques together into cbow model, the word embedding learned scores much higher in the several word embedding test.
 
 Author of this paper has also reports the finding that **de-duplicating sentences** in large corpora (such as Common Crawl) is **an important pre-processing step** which can significantly improves the quality of word embedding learned.
+
+### 1. Vanilla Continuous Bag of Words model
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE2NzMyMDE5NDBdfQ==
+eyJoaXN0b3J5IjpbLTIwMzQwMTkwNSwtMTY3MzIwMTk0MF19
 -->
