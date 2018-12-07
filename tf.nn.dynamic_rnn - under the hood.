@@ -1,0 +1,67 @@
+# What's *tf.nn.dynamic_rnn* anyway?
+
+### Start with original equations
+Recurrent neural network is a network ...
+
+### Let's implement it
+The way to implement it, intuitively, is to conduct a for loop for how many time steps there is, in each time step we pass in the previous hidden states $h_{t-1}$ and current input $x_t$
+
+```python
+h_t = np.zeros(0)
+for step in timestep:
+	h_t_prev = h_t
+	h_t = sigmoid(W_x * x_t + W_h * h_t_prev)
+```
+*Note: The equation aren't exactly complete in the sense that a bias term is purposely left out for the sake of clarity. The important thing to note here is how we are re-using the same weights when we go through the sequence*
+
+This implementation is known as **static unrolled rnn**. It forces user to define how many time steps are there prior building the computation graph, which cause the following disadvantage:
+
+####  Computation resources wastage 
+Imagine if your training data contains 2 sentences of length 10 and 6. For example:
+
+Sentence 1: "I love pineapple on pizza regardless of what people say".
+
+Sentence 2: "But pineapple on pizza is disgusting".
+
+In order  to make the computation works, you will need to zero pad the second sentence of length 6 so that it has length of 10, as such:
+
+Sentence 2: "But pineapple on pizza is disgusting **\<pad> \<pad> \<pad> \<pad>**"
+
+During forward propagation, since the computation graph have been defined strictly to loop for 10 times (to accommodate the longest sentence - in this case sentence 1), the **\<pad>** value in the second sentence will also undergo the same computation, which we know isn't necessary. In other word, the ideal case is to stop computing after the 6th word. 
+
+### `tf.nn.dynamic_rnn` to the rescue!
+*tf.nn.dynamic_rnn* is a way to counter the concern raised above: it will not compute the \<pad> value of sentence and just append vector of "0" to make the matrix looks nice. 
+- What do you mean by append vector of "0"???
+
+In order to do that, tf.nn.dynamic_rnn requires an additional input: `sequence_length`
+
+#### `sequence_length`
+This parameter is an input of type `tf.int32` and of shape `[batch_size]`. The value in this parameter should tell the function *"how long is each sentence in this batch?"*. Continuing with our example above, for the two sentences, their respective `sequence_length` parameters should be 
+```python
+sequence_length = [10, 6]
+```
+
+With this parameter, the function `tf.nn.dynamic_rnn` will know for current sentence, when should it stop computing the hidden states and return the computed states, instead of continuing with the calculation for \<pad> value.
+
+Keen reader by now should be wondering: What about the outputs of hidden states for the \<pad> value? The reason this question might pop up is because you understand that in some advance implementation, certain mechanism (such as Attention) requires all the hidden states value from all the time steps and the shape should agree regardless of the batch they belong to. In another words, taking our first sentence as example, in the end of the RNN forward propagation, we should have a hidden states Tensor coming out from all the time steps
+
+**`[sentence_length, hidden_state_size]`**
+--- Diagram here to show the output of rnn cell from all the timesteps
+
+What `tf.nn.dynamic_rnn` will do is to simply set the hidden state of skipped tokens (the \<pad> value it didn't calculate) to vectors of zeros of the size **`[hidden_state_size]`**
+
+
+### Outputs of `tf.nn.dynamic_rnn`
+
+From the documentation, it stated that `tf.nn.dynamic_rnn` returns the following output:
+
+> A pair (outputs, state) where:
+> 
+> **`outputs`**: The RNN output Tensor of shape **`[batch_size, max_time, cell.output_size]`** or **`[max_time, batch_size, cell.output_size]`** depending on your `time_major` parameter
+>  
+>  **`state`**: The final state, of shape **`[batch_size, cell.state_size]`**.
+
+However, since the size of `outputs` must agree regardless of batches for downstream task (for instance, passing all the hidden state to next layer of LSTM, or doing an attention mechanism)
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbLTI2MDAxNzAyMl19
+-->
