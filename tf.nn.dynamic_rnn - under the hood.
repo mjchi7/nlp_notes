@@ -14,7 +14,7 @@ for step in timestep:
 ```
 *Note: The equation aren't exactly complete in the sense that a bias term is purposely left out for the sake of clarity. The important thing to note here is how we are re-using the same weights when we go through the sequence*
 
-This implementation is known as **static unrolled rnn**. It forces user to define how many time steps are there prior building the computation graph, which cause the following disadvantage:
+This implementation is known as **static unrolled rnn**. It forces user to define how many time steps are there through the variable `timestep` prior building the computation graph, which cause the following disadvantage:
 
 ####  Computation resources wastage 
 Imagine if your training data contains 2 sentences of length 10 and 6. For example:
@@ -63,5 +63,5 @@ From the documentation, it stated that `tf.nn.dynamic_rnn` returns the following
 
 However, since the size of `outputs` must agree regardless of batches for downstream task (for instance, passing all the hidden state to next layer of LSTM, or doing an attention mechanism)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTI2MDAxNzAyMl19
+eyJoaXN0b3J5IjpbMjA0NTU0NTEyMSwtMjYwMDE3MDIyXX0=
 -->
