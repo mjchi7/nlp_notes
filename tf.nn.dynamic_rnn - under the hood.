@@ -35,7 +35,7 @@ In order  to make the computation works, you will need to zero pad the second se
 During forward propagation, since the computation graph have been defined strictly to loop for 10 times (to accommodate the longest sentence - in this case sentence 1), the **\<pad>** value in the second sentence will also undergo the same computation, which we know isn't necessary. In other word, the ideal case is to stop computing after the 6th word. 
 
 ### `tf.nn.dynamic_rnn` to the rescue!
-*tf.nn.dynamic_rnn* is a way to counter the concern raised above: it will not compute the \<pad> value of sentence and just append vector of "0" to make the matrix looks nice. To visualize what do I meant by "append vector of '0' to make the matrix looks nice", I have provided a code snippet
+*tf.nn.dynamic_rnn* is a way to counter the concern raised above: it will not compute the \<pad> value of sentence and just append vector of "0" so the matrix size agree.
 In order to do that, tf.nn.dynamic_rnn requires an additional input: `sequence_length`
 
 #### `sequence_length`
@@ -43,7 +43,6 @@ This parameter is an input of type `tf.int32` and of shape `[batch_size]`. The v
 ```python
 sequence_length = [10, 6]
 ```
-
 With this parameter, the function `tf.nn.dynamic_rnn` will know for current sentence, when should it stop computing the hidden states and return the computed states, instead of continuing with the calculation for \<pad> value.
 
 Keen reader by now should be wondering: What about the outputs of hidden states for the \<pad> value? The reason this question might pop up is because you understand that in some advance implementation, certain mechanism (such as Attention) requires all the hidden states value from all the time steps and the shape should agree regardless of the batch they belong to. In another words, taking our first sentence as example, in the end of the RNN forward propagation, we should have a hidden states Tensor coming out from all the time steps
@@ -52,6 +51,8 @@ Keen reader by now should be wondering: What about the outputs of hidden states 
 --- Diagram here to show the output of rnn cell from all the timesteps
 
 What `tf.nn.dynamic_rnn` will do is to simply set the hidden state of skipped tokens (the \<pad> value it didn't calculate) to vectors of zeros of the size **`[hidden_state_size]`**
+
+### Codes
 
 
 ### Outputs of `tf.nn.dynamic_rnn`
@@ -64,9 +65,9 @@ From the documentation, it stated that `tf.nn.dynamic_rnn` returns the following
 >  
 >  **`state`**: The final state, of shape **`[batch_size, cell.state_size]`**.
 
-However, since the size of `outputs` must agree regardless of batches for downstream task (for instance, passing all the hidden state to next layer of LSTM, or doing an attention mechanism)
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbOTg1NDE2NDI5LDExNTM2NDI4ODMsLTY1Nj
-g1ODQyMCwtNDk5NjAyNDQsNTk4MzY3MDE4LC0xMDExMzgwNDUs
-MjA0NTU0NTEyMSwtMjYwMDE3MDIyXX0=
+eyJoaXN0b3J5IjpbLTE1MTE4NTY2MjUsMTE1MzY0Mjg4MywtNj
+U2ODU4NDIwLC00OTk2MDI0NCw1OTgzNjcwMTgsLTEwMTEzODA0
+NSwyMDQ1NTQ1MTIxLC0yNjAwMTcwMjJdfQ==
 -->
