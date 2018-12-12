@@ -7,7 +7,7 @@ data = ["Some", "random", "data", "."]
 ```
 The data can be viewed in terms of `time_steps`, where the element `"Some"` can be refer to $x_{t=1}$, `"random"` as $x_{t=2}$, `"data"` as $x_{t=3}$, and `"."` as $x_{t=4}$.
 
-The RNN will take as input the first datum `"Some"`, pass it into the network, producing an output $y_{t=1}$ and hidden state representation $h_{t=2}$ using a set of weight $W_{rnn}$ and bias $b_{rnn}$. For the second data point `"random"`, the network will again use back the same set of weight and bias, $W_{rnn}$ and $b_{rnn}$ to produce an output $y_{t=2}$ and hidden state representation $h_{t=2}$. This will go on until the hidden state and output for ${t=3}$ and $t=4$ are computed.
+The RNN will take as input the first datum `"Some"`, pass it into the network, producing an output $y_{t=1}$ and hidden state representation $h_{t=2}$ using a set of weight $W_{rnn}$ and bias $b_{rnn}$. For the second data point `"random"`, the network will again use back the same set of weight and bias, $W_{rnn}$ and $b_{rnn}$ to produce an output $y_{t=2}$ and hidden state representation $h_{t=2}$. This will go on until the hidden state and output for ${t=3}$ and $t=4$ are computed. If reader is interested to understand more on RNN, here is a very good [resource.](http://www.wildml.com/2015/09/recurrent-neural-networks-tutorial-part-1-introduction-to-rnns/)
 
 ### Let's implement it
 The way to implement it, intuitively, is to conduct a for loop for how many time steps there is, in each time step we pass in the previous hidden states $h_{t-1}$ and current input $x_t$
@@ -69,7 +69,7 @@ From the documentation, it stated that `tf.nn.dynamic_rnn` returns the following
 
 However, since the size of `outputs` must agree regardless of batches for downstream task (for instance, passing all the hidden state to next layer of LSTM, or doing an attention mechanism)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbOTkyODQ3Mzc3LC02NTY4NTg0MjAsLTQ5OT
-YwMjQ0LDU5ODM2NzAxOCwtMTAxMTM4MDQ1LDIwNDU1NDUxMjEs
-LTI2MDAxNzAyMl19
+eyJoaXN0b3J5IjpbMTkwNzA3NDE4MiwtNjU2ODU4NDIwLC00OT
+k2MDI0NCw1OTgzNjcwMTgsLTEwMTEzODA0NSwyMDQ1NTQ1MTIx
+LC0yNjAwMTcwMjJdfQ==
 -->
