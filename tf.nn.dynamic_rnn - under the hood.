@@ -19,13 +19,13 @@ This implementation is known as **static unrolled rnn**. It forces user to defin
 ####  Computation resources wastage 
 Imagine if your training data contains 2 sentences of length 10 and 6. For example:
 
-Sentence 1: "I love pineapple on pizza regardless of what people say".
+> **Sentence 1**: "I love pineapple on pizza regardless of what people say".
 
-Sentence 2: "But pineapple on pizza is disgusting".
+> **Sentence 2**: "But pineapple on pizza is disgusting".
 
 In order  to make the computation works, you will need to zero pad the second sentence of length 6 so that it has length of 10, as such:
 
-Sentence 2: "But pineapple on pizza is disgusting **\<pad> \<pad> \<pad> \<pad>**"
+> **Sentence 2**: "But pineapple on pizza is disgusting **\<pad> \<pad> \<pad> \<pad>**"
 
 During forward propagation, since the computation graph have been defined strictly to loop for 10 times (to accommodate the longest sentence - in this case sentence 1), the **\<pad>** value in the second sentence will also undergo the same computation, which we know isn't necessary. In other word, the ideal case is to stop computing after the 6th word. 
 
@@ -63,5 +63,6 @@ From the documentation, it stated that `tf.nn.dynamic_rnn` returns the following
 
 However, since the size of `outputs` must agree regardless of batches for downstream task (for instance, passing all the hidden state to next layer of LSTM, or doing an attention mechanism)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjA0NTU0NTEyMSwtMjYwMDE3MDIyXX0=
+eyJoaXN0b3J5IjpbLTEwMTEzODA0NSwyMDQ1NTQ1MTIxLC0yNj
+AwMTcwMjJdfQ==
 -->
