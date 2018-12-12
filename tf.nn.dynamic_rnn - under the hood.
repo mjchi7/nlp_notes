@@ -1,7 +1,7 @@
 # What's *tf.nn.dynamic_rnn* anyway?
 
 ### Start with original equations
-Recurrent Neural Network 
+Recurrent Neural Network (RNN) is a class of neural network that excels at data that exhibits certain temporal pattern (such as sentences, audio signal, time series data, and etc.). The main idea behind RNN 
 
 ### Let's implement it
 The way to implement it, intuitively, is to conduct a for loop for how many time steps there is, in each time step we pass in the previous hidden states $h_{t-1}$ and current input $x_t$
@@ -63,6 +63,6 @@ From the documentation, it stated that `tf.nn.dynamic_rnn` returns the following
 
 However, since the size of `outputs` must agree regardless of batches for downstream task (for instance, passing all the hidden state to next layer of LSTM, or doing an attention mechanism)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTk4MzY3MDE4LC0xMDExMzgwNDUsMjA0NT
-U0NTEyMSwtMjYwMDE3MDIyXX0=
+eyJoaXN0b3J5IjpbMjQyNjY5NzgxLDU5ODM2NzAxOCwtMTAxMT
+M4MDQ1LDIwNDU1NDUxMjEsLTI2MDAxNzAyMl19
 -->
